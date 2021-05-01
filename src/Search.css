@@ -17,6 +17,21 @@
     width:100%;
   }
 
+  @keyframes slidein{
+    0%{
+      height:0;
+    }
+
+    100%{
+      height:100%;
+    }
+  }
+
+  .hiddenBanner{
+    animation: slidein 1s forwards;
+    background-color: green;
+  }
+
   /* Search Form Title */
 
   .div2 {
@@ -65,15 +80,15 @@
       height:30px;
     }
 
-/* Vote */
+  /* Vote */
 
-.chat-popup{
-position: fixed;
-bottom: 1%;
-right: 15px;
-border: 1px solid grey;
-border-radius: 5px;
-height:40%;
-width:20%;
-z-index: 9;
-}
+  .chat-popup{
+  position: fixed;
+  bottom: 1%;
+  right: 15px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  height:40%;
+  width:20%;
+  z-index: 9;
+  }

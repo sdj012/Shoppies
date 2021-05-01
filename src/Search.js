@@ -6,7 +6,7 @@ class Search extends React.Component {
   constructor(props){
 
     super(props);
-
+    
     this.state={
       Movies:[],
       Nominees:[],
@@ -19,6 +19,8 @@ class Search extends React.Component {
     this.checkDuplicates=this.checkDuplicates.bind(this);
     this.markNominated=this.markNominated.bind(this);
     this.getIndexValue=this.getIndexValue.bind(this);
+    this.hitMaxNumberOfVotes=this.hitMaxNumberOfVotes.bind(this);
+    this.removeFromList=this.removeFromList.bind(this);
     // this.allMovies=this.allMovies.bind(this);
   
   }
@@ -58,6 +60,39 @@ class Search extends React.Component {
 
     })
 
+  }
+
+  removeFromList(event){
+
+    event.preventDefault();
+
+    let counter=0;
+    let index=0;
+
+    for(counter in this.state.Nominees){
+
+      if(event.target.value==this.state.Nominees[counter]) index=counter;// Deliever event.target.value's Index Position In Currently Rendered Array of Movies
+      counter++; // Increment returnedindex Value by One At The End Of Each Loop
+
+    }
+    
+    let updatedData=this.state.Nominees.slice(0);
+    updatedData.splice(index,1);
+
+    this.setState({
+      Nominees:updatedData
+    })
+
+  }
+
+  hitMaxNumberOfVotes(){
+
+    if(this.state.Nominees.length == 5 ) {
+      return "div1 hiddenBanner"
+    }
+    
+    else return "div1"
+    
   }
 
   handleChange(event){
@@ -107,7 +142,7 @@ class Search extends React.Component {
     updatedData[index].Nominated=true;
 
     this.setState({
-      Movies:[...this.state.Movies,updatedData]
+      Movies:updatedData
     })
 
     console.log("Nominee Added : " + event.target.value);
@@ -163,9 +198,14 @@ class Search extends React.Component {
   }
 
   render() {
+
+    let bannerVisibility=this.hitMaxNumberOfVotes();
+    console.log("bannerVisibility: " + bannerVisibility)
+
     return(
       <div className="parent">
         <div className="div1">Shoppies</div>
+        <div className={bannerVisibility}>You Voted For 5 Movies. Head to Submit</div>
         <div className="div2"></div>
         <div className="div3"><input type="text" placeholder="Search For a Movie"></input></div>
         <div className="div4"><button>Search</button></div>
@@ -177,7 +217,7 @@ class Search extends React.Component {
           {this.state.Movies.map(movie => 
             <div>
               <p>{movie.Title}</p>
-                <button value={movie.Title} onClick={this.handleChange} disabled={movie.Nominated}>Nominate</button>
+                <button className="nominateButton" value={movie.Title} onClick={this.handleChange} disabled={movie.Nominated}>Nominate</button>
             </div>
           )}
 
@@ -187,7 +227,8 @@ class Search extends React.Component {
 
         <div className="chat-popup" id="myForm">
           <form className="form-container">
-          <div className="nominees">{this.state.Nominees.map(nominee => <p>{nominee}</p>)}</div>
+          <div className="nominees">{this.state.Nominees.map(nominee => <p>{nominee}<button value={nominee} onClick={this.removeFromList}>remove</button></p>)}</div>
+          <div className="modal">Heads Up! You Already Voted For 5 Movies</div>
           <button>Submit</button>
           </form>
         </div> 
