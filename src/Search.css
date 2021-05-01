@@ -64,3 +64,16 @@
     .div5 > button {
       height:30px;
     }
+
+/* Vote */
+
+.chat-popup{
+position: fixed;
+bottom: 1%;
+right: 15px;
+border: 1px solid grey;
+border-radius: 5px;
+height:40%;
+width:20%;
+z-index: 9;
+}

@@ -183,8 +183,16 @@ class Search extends React.Component {
 
         </div>
 
-        <div>{this.state.Nominees.map(nominee => <p>{nominee}</p>)}</div>
 
+
+        <div className="chat-popup" id="myForm">
+          <form className="form-container">
+          <div className="nominees">{this.state.Nominees.map(nominee => <p>{nominee}</p>)}</div>
+          <button>Submit</button>
+          </form>
+        </div> 
+
+        
       </div>
 
     )
