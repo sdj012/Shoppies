@@ -62,6 +62,7 @@ class Search extends React.Component {
 
   handleChange(event){
 
+    let counter=0;
     let index=0;
 
     event.preventDefault();
@@ -85,12 +86,28 @@ class Search extends React.Component {
 
     //Change to While
 
-    this.state.Movies.map(movie=>{
+    // this.state.Movies.map(movie=>{
 
-      if(event.target.value==movie.Title) return index; // Deliever event.target.value's Index Position In Currently Rendered Array of Movies
+    //   if(event.target.value==movie.Title) return index; // Deliever event.target.value's Index Position In Currently Rendered Array of Movies
 
-      index++; // Increment returnedindex Value by One At The End Of Each Loop
+    //   index++; // Increment returnedindex Value by One At The End Of Each Loop
 
+    // })
+
+    let updatedData=this.state.Movies.slice(0);
+
+    for(counter in updatedData){
+
+      if(event.target.value==updatedData[counter].Title) index=counter;// Deliever event.target.value's Index Position In Currently Rendered Array of Movies
+
+      counter++; // Increment returnedindex Value by One At The End Of Each Loop
+
+    }
+
+    updatedData[index].Nominated=true;
+
+    this.setState({
+      Movies:[...this.state.Movies,updatedData]
     })
 
     console.log("Nominee Added : " + event.target.value);
