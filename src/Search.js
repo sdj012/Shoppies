@@ -10,18 +10,20 @@ class Search extends React.Component {
     this.state={
       Movies:[],
       Nominees:[],
+      SearchTerm:'',
+      loading:true,
     }
-
-    this.componentDidMount=this.componentDidMount.bind(this);
-    this.returnMovies=this.returnMovies.bind(this);
-    // this.addToNominees=this.addToNominees.bind(this);
+    // this.componentDidUpdate=this.componentDidUpdate.bind(this);
+    // this.componentDidMount=this.componentDidMount.bind(this);
+    // this.returnMovies=this.returnMovies.bind(this);
     this.handleChange=this.handleChange.bind(this);
-    this.checkDuplicates=this.checkDuplicates.bind(this);
-    this.markNominated=this.markNominated.bind(this);
+    // this.checkDuplicates=this.checkDuplicates.bind(this);
+    // this.markNominated=this.markNominated.bind(this);
     this.getIndexValue=this.getIndexValue.bind(this);
     this.hitMaxNumberOfVotes=this.hitMaxNumberOfVotes.bind(this);
     this.removeFromList=this.removeFromList.bind(this);
-    // this.allMovies=this.allMovies.bind(this);
+    this.handleSearch=this.handleSearch.bind(this);
+    this.existsInList=this.existsInList.bind(this);
   
   }
 
@@ -83,6 +85,8 @@ class Search extends React.Component {
       Nominees:updatedData
     })
 
+    document.getElementById(event.target.value).disabled="";
+
   }
 
   hitMaxNumberOfVotes(){
@@ -95,6 +99,12 @@ class Search extends React.Component {
     
   }
 
+  handleSearch(event){
+    this.setState({
+      SearchTerm:event.target.value,
+    })
+  }
+
   handleChange(event){
 
     let counter=0;
@@ -102,32 +112,12 @@ class Search extends React.Component {
 
     event.preventDefault();
 
-    //Check For Duplicates
-    //Only If Nominee Doesn't Exist 
-    // if( this.state.Nominees.length == 0 || !this.checkDuplicates(event.target.value)){
-
-    //   this.setState({
-    //     Nominees:[...this.state.Nominees,event.target.value]
-    //   })
-
-    //   console.log("Nominee Added : " + event.target.value);
-
-      // Wait for State to Update //
 
     this.setState({
       Nominees:[...this.state.Nominees,event.target.value]
     })
 
 
-    //Change to While
-
-    // this.state.Movies.map(movie=>{
-
-    //   if(event.target.value==movie.Title) return index; // Deliever event.target.value's Index Position In Currently Rendered Array of Movies
-
-    //   index++; // Increment returnedindex Value by One At The End Of Each Loop
-
-    // })
 
     let updatedData=this.state.Movies.slice(0);
 
@@ -147,6 +137,8 @@ class Search extends React.Component {
 
     console.log("Nominee Added : " + event.target.value);
 
+    // document.getElementById(event.target.value).style.display="none";
+    document.getElementById(event.target.value).disabled="true";
     }
 
 
@@ -180,7 +172,20 @@ class Search extends React.Component {
           [prevState.Movies[1].Nominated]: true,
       },
     }));
+  }
 
+  existsInList(movie){
+
+    console.log("clicked on: " + movie)
+
+    this.state.Nominees.map(nominee=>{
+
+      if(movie==nominee)return true;
+      console.log("nominee: " + nominee)
+
+    })
+
+    return false;
 
 
   }
@@ -189,36 +194,58 @@ class Search extends React.Component {
     return this.state.Movies;
   }
 
-  // Search Fetch from Api //
-  componentDidMount(){
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=Star")
+  componentDidUpdate(){
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm)
     .then(response => response.json())
     .then(result=>this.queryResults(result))
     .catch(error=>error);
   }
+
+
+
+  // Search Fetch from Api //
+  // componentDidMount(){
+    
+  //   fetch("http://www.omdbapi.com/?apikey=e8dad806&s=Star")
+  //   .then(response => response.json())
+  //   .then(result=>this.queryResults(result))
+  //   .catch(error=>error);
+
+  // }
 
   render() {
 
     let bannerVisibility=this.hitMaxNumberOfVotes();
     console.log("bannerVisibility: " + bannerVisibility)
 
+
     return(
       <div className="parent">
         <div className="div1">Shoppies</div>
         <div className={bannerVisibility}>You Voted For 5 Movies. Head to Submit</div>
         <div className="div2"></div>
-        <div className="div3"><input type="text" placeholder="Search For a Movie"></input></div>
-        <div className="div4"><button>Search</button></div>
+  
+        <div className="div3">
+          <form>
+            <input value={this.state.searchTerm} type="text" placeholder="Search For a Movie" onChange={this.handleSearch}></input>
+            <button value="submit">Search</button>
+          </form>
+        </div>
+
+
 
         
         {/* Each Movie: Title, Year, Disable-able Nominate Button */}
 
         <div className="div5">
+
           {this.state.Movies.map(movie => 
+
             <div>
               <p>{movie.Title}</p>
-                <button className="nominateButton" value={movie.Title} onClick={this.handleChange} disabled={movie.Nominated}>Nominate</button>
+              <button className="nominateButton" id={movie.Title} value={movie.Title} onClick={this.handleChange}>Nominate</button>
             </div>
+
           )}
 
         </div>
