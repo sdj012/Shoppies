@@ -1,29 +1,66 @@
-.parent {
+  .parent {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(6, 1fr);
+  grid-template-rows: repeat(6, 100px);
   grid-column-gap: 0px;
-  grid-row-gap: 100px;
+  grid-row-gap: 0px;
+  
   }
   
+  /* Nav Bar */
   .div1 { 
     grid-area: 1 / 1 / 2 / 9; 
     justify-self: left;
+    /* color:white; */
+    z-index:0;
+    background-color: black;
+    width:100%;
   }
 
+  /* Search Form Title */
+
   .div2 {
-    grid-area: 3 / 2 / 4 / 8; 
+    grid-area: 2 / 2 / 3 / 8; 
   }
+
+  /* Input */
 
   .div3 {
     grid-area: 4 / 2 / 5 / 6;
     width: 100%;
+    justify-self: right;
   }
 
-  .div3 > input{
-    width:100%;
-  }
+    .div3 > input{
+      width:60%;
+      height:30px;
+    }
+
+  /* Button */
 
   .div4 { 
     grid-area: 4 / 6 / 5 / 8; 
+    /* align-self: center; */
+
+    margin-top:0px;
+    padding-top:0px;
+    margin-bottom:0px;
+    padding-bottom:0px;
   }
+
+    .div4 > button {
+      width:50%;
+      height:35px;
+      border-radius: 5px;
+
+    }
+
+  .div5{
+    grid-area: 5 / 2 / 6 / 8; 
+    justify-self: left;
+    text-align: left;
+  }
+
+    .div5 > button {
+      height:30px;
+    }
