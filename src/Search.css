@@ -10,12 +10,37 @@
   /* Nav Bar */
   .div1 { 
     grid-area: 1 / 1 / 2 / 9; 
-    justify-self: left;
+    /* justify-self: left; */
     /* color:white; */
-    z-index:0;
+    z-index:9;
     background-color: black;
     width:100%;
   }
+
+  .nominees{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+
+    .nominees > div {
+      position: relative;
+      left:0;
+      z-index: 9;
+      border:3px solid white;
+      border-radius: 20px;
+
+      padding-top:0.5%;
+      padding-bottom:0.5%;
+      padding-right:0.5%;
+      padding-left:0.5%;
+
+      width:fit-content;
+      color:white;
+      font-weight: bold;
+      margin:0.5% 0.5% 0.5% 0.5%;
+    }
 
   @keyframes slidein{
     0%{
@@ -23,14 +48,31 @@
     }
 
     100%{
-      height:100%;
+      height:100px;
     }
   }
 
   .hiddenBanner{
+    position: fixed;
+    justify-self: left;
     animation: slidein 1s forwards;
-    background-color: green;
+    background: rgb(131,58,180);
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
   }
+
+  .hiddenLayer{
+    display:none;
+  }
+
+  .lockingLayer{
+    z-index: 1;
+    position:fixed;
+    height:100vh;
+    width:100vw;
+    opacity: 0.3;
+    background-color: black;
+  }
+
 
   /* Search Form Title */
 
@@ -40,15 +82,22 @@
 
   /* Input */
 
-  .div3 {
-    grid-area: 4 / 2 / 5 / 6;
-    width: 100%;
-    justify-self: right;
-  }
-
+    .div3 {
+      grid-area: 4 / 2 / 5 / 6;
+      width: 100%;
+      justify-self: center;
+    }
+/* 
     .div3 > input{
       width:60%;
       height:30px;
+    } */
+
+    .searchBar{
+      width:75%;
+      height:4vh;
+      border-radius: 10px;
+      border:5px solid black;
     }
 
   /* Button */
@@ -83,12 +132,73 @@
   /* Vote */
 
   .chat-popup{
-  position: fixed;
-  bottom: 1%;
-  right: 15px;
-  border: 1px solid grey;
-  border-radius: 5px;
-  height:40%;
-  width:20%;
-  z-index: 9;
+    position: fixed;
+    bottom: 1%;
+    right: 15px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    height:40%;
+    width:20%;
+    z-index: 9;
   }
+
+  .movieCard{
+    background-color:white;
+    border-radius: 5px;
+    -webkit-box-shadow: -10px 0px 13px -7px #464646, 10px 0px 13px -7px #464646, 5px 5px 15px 5px rgba(0,0,0,0); 
+    box-shadow: -10px 0px 13px -7px #464646, 10px 0px 13px -7px #464646, 5px 5px 15px 5px rgba(0,0,0,0);
+    height:100%;
+    width:500px;
+    padding-right:3%;
+    padding-top:1%;
+    padding-bottom:3%;
+    margin:3%;
+  }
+
+    .movieTitle {
+      position:relative;
+      top:15%;
+      margin-left:5%;
+      color:black;
+      font-weight: bolder;
+    }
+    
+    .movieYear{
+      position:relative;
+      top:15%;
+      margin-left:5%;
+      color:black;
+      font-weight:lighter;
+    }
+
+    .movieCard > button {
+      position:relative;
+      margin-right:auto;
+      left:75%;
+      bottom:35%;
+
+      padding-top:1%;
+      padding-bottom:1%;
+
+      border-radius: 25px;
+      border:rgb(31, 31, 31);
+      border-style: solid;
+      border-width: 5px;
+      width:20%;
+      background-color: transparent;
+      font-weight: bold;
+    }
+
+    @keyframes buttonAnimation {
+      0%{
+        transform: scale(1);
+      }
+      100%{
+        transform:scale(1.1);
+      }
+    }
+
+    .movieCard > button:hover{
+      transform: scale(1.03);
+      animation: buttonAnimation .03s forwards;
+    }

@@ -13,7 +13,7 @@ class Search extends React.Component {
       SearchTerm:'',
       loading:true,
     }
-    // this.componentDidUpdate=this.componentDidUpdate.bind(this);
+    this.componentDidUpdate=this.componentDidUpdate.bind(this);
     // this.componentDidMount=this.componentDidMount.bind(this);
     // this.returnMovies=this.returnMovies.bind(this);
     this.handleChange=this.handleChange.bind(this);
@@ -24,7 +24,9 @@ class Search extends React.Component {
     this.removeFromList=this.removeFromList.bind(this);
     this.handleSearch=this.handleSearch.bind(this);
     this.existsInList=this.existsInList.bind(this);
-  
+    this.disableExistingNominees=this.disableExistingNominees.bind(this);
+    this.generateID=this.generateID.bind(this);
+    this.lockScreen=this.lockScreen.bind(this);
   }
 
   queryResults(data){
@@ -66,7 +68,7 @@ class Search extends React.Component {
 
   removeFromList(event){
 
-    event.preventDefault();
+    document.getElementById(this.generateID(event.target.value)).disabled=""; 
 
     let counter=0;
     let index=0;
@@ -78,14 +80,25 @@ class Search extends React.Component {
 
     }
     
-    let updatedData=this.state.Nominees.slice(0);
+    let updatedData=this.state.Nominees.slice(0); //Remove event.target.value from Nominees List
     updatedData.splice(index,1);
 
     this.setState({
       Nominees:updatedData
     })
 
-    document.getElementById(event.target.value).disabled="";
+    // document.getElementById(this.generateID(movieTitle)).disabled="";
+
+  }
+
+  generateID(movieTitle){
+
+    //remove spaces
+    let id=movieTitle;
+    id = id.replace(/\s+/g, '');
+
+    console.log("generated ID: " + id)
+    return id;
 
   }
 
@@ -99,10 +112,27 @@ class Search extends React.Component {
     
   }
 
+  lockScreen(){
+
+    if(this.state.Nominees.length == 5 ) {
+      return "lockingLayer"
+    }
+    
+    else return "hiddenLayer"
+
+  }
+
   handleSearch(event){
+
     this.setState({
       SearchTerm:event.target.value,
     })
+
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm)
+    .then(response => response.json())
+    .then(result=>this.queryResults(result))
+    .catch(error=>error);
+
   }
 
   handleChange(event){
@@ -110,7 +140,7 @@ class Search extends React.Component {
     let counter=0;
     let index=0;
 
-    event.preventDefault();
+    // event.preventDefault();
 
 
     this.setState({
@@ -138,7 +168,30 @@ class Search extends React.Component {
     console.log("Nominee Added : " + event.target.value);
 
     // document.getElementById(event.target.value).style.display="none";
-    document.getElementById(event.target.value).disabled="true";
+    // document.getElementById(event.target.value).disabled="true";
+    }
+
+    disableExistingNominees(){
+
+      let MoviesIndex=0;
+      let NomineesIndex=0;
+
+        for(MoviesIndex in this.state.Movies){
+
+          let movieTitleInMovies=this.state.Movies[MoviesIndex].Title;
+
+          for(NomineesIndex in this.state.Nominees){
+
+            let movieTitleInNominees=this.state.Nominees[NomineesIndex]; 
+
+            if(movieTitleInMovies==movieTitleInNominees) document.getElementById(this.generateID(movieTitleInMovies)).disabled="true"; //Loop Through Current Render of Movies & Search For the Movie Title in Nominees List
+
+            NomineesIndex++;
+
+          }
+
+          MoviesIndex++;
+        }
     }
 
 
@@ -174,13 +227,13 @@ class Search extends React.Component {
     }));
   }
 
-  existsInList(movie){
+  existsInList(movieTitle){
 
-    console.log("clicked on: " + movie)
+    console.log("clicked on: " + movieTitle)
 
     this.state.Nominees.map(nominee=>{
 
-      if(movie==nominee)return true;
+      if(movieTitle==nominee)return true;
       console.log("nominee: " + nominee)
 
     })
@@ -195,10 +248,9 @@ class Search extends React.Component {
   }
 
   componentDidUpdate(){
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm)
-    .then(response => response.json())
-    .then(result=>this.queryResults(result))
-    .catch(error=>error);
+
+
+    this.disableExistingNominees(); //Check If Current Render Contains Titles in Current Nominee List. If Title Present in Current Nominee List, Disable the Nominate Button
   }
 
 
@@ -216,19 +268,27 @@ class Search extends React.Component {
   render() {
 
     let bannerVisibility=this.hitMaxNumberOfVotes();
+    let screenlock=this.lockScreen();
     console.log("bannerVisibility: " + bannerVisibility)
 
 
     return(
       <div className="parent">
-        <div className="div1">Shoppies</div>
-        <div className={bannerVisibility}>You Voted For 5 Movies. Head to Submit</div>
+        <div className={screenlock}></div>
+
+        <div className="div1">
+
+          <div className="nominees">{this.state.Nominees.map(nominee => <div>{nominee} <button value={nominee} onClick={this.removeFromList}>remove</button></div>)}</div>
+        
+        </div>
+
+        {/* <div className={bannerVisibility}>You Voted For 5 Movies. Head to Submit</div> */}
         <div className="div2"></div>
   
         <div className="div3">
           <form>
-            <input value={this.state.searchTerm} type="text" placeholder="Search For a Movie" onChange={this.handleSearch}></input>
-            <button value="submit">Search</button>
+            <input className="searchBar" value={this.state.searchTerm} type="text" placeholder="Search For a Movie" onChange={this.handleSearch}></input>
+            {/* <button value="submit">Search</button> */}
           </form>
         </div>
 
@@ -241,9 +301,12 @@ class Search extends React.Component {
 
           {this.state.Movies.map(movie => 
 
-            <div>
-              <p>{movie.Title}</p>
-              <button className="nominateButton" id={movie.Title} value={movie.Title} onClick={this.handleChange}>Nominate</button>
+            <div className="movieCard">
+              <p className="movieTitle">{movie.Title}</p>
+              <p className="movieYear">{movie.Year}</p>
+              <button className="nominateButton" id={this.generateID(movie.Title)} value={movie.Title} onClick={this.handleChange}>Nominate</button>
+
+              {/* disable={this.existsInList(movie.Title)}   */}
             </div>
 
           )}
@@ -252,13 +315,13 @@ class Search extends React.Component {
 
 
 
-        <div className="chat-popup" id="myForm">
+        {/* <div className="chat-popup" id="myForm">
           <form className="form-container">
-          <div className="nominees">{this.state.Nominees.map(nominee => <p>{nominee}<button value={nominee} onClick={this.removeFromList}>remove</button></p>)}</div>
-          <div className="modal">Heads Up! You Already Voted For 5 Movies</div>
-          <button>Submit</button>
+            <div className="nominees">{this.state.Nominees.map(nominee => <div>{nominee} <button id={this.generateID(nominee)} value={nominee} onClick={this.removeFromList}>remove</button></div>)}</div>
+            <div className="modal">Heads Up! You Already Voted For 5 Movies</div>
+            <button>Submit</button>
           </form>
-        </div> 
+        </div>  */}
 
         
       </div>
