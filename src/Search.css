@@ -1,25 +1,39 @@
+  
   .parent {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(6, 100px);
+  grid-template-rows: repeat(6, 150px);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-  
+  }
+
+  .footer{
+    grid-area: 9 / 9 / 3 / 9; 
+    width:100%;
+    height:50px;
+    background-color: black;
   }
   
   /* Nav Bar */
   .div1 { 
-    grid-area: 1 / 1 / 2 / 9; 
+    grid-area: 1 / 1 / 3 / 9; 
+    
     /* justify-self: left; */
     /* color:white; */
     z-index:9;
-    background-color: black;
+    /* background-color: black; */
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
     width:100%;
   }
 
   .nominees{
+    position:fixed;
+    /* background-color: black; */
+    background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+    width:100%;
+    right:0;
     display:flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     flex-wrap: wrap;
   }
 
@@ -30,6 +44,9 @@
       z-index: 9;
       border:3px solid white;
       border-radius: 20px;
+
+      /* background: rgb(34,193,195);
+      background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%); */
 
       padding-top:0.5%;
       padding-bottom:0.5%;
@@ -120,9 +137,13 @@
     }
 
   .div5{
-    grid-area: 5 / 2 / 6 / 8; 
-    justify-self: left;
-    text-align: left;
+    grid-area: 5 / 1 / 6 / 9; 
+    /* justify-self: left;
+    text-align: left; */
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
     .div5 > button {
@@ -130,7 +151,7 @@
     }
 
   /* Vote */
-
+/* 
   .chat-popup{
     position: fixed;
     bottom: 1%;
@@ -140,65 +161,87 @@
     height:40%;
     width:20%;
     z-index: 9;
-  }
+  } */
 
-  .movieCard{
-    background-color:white;
-    border-radius: 5px;
-    -webkit-box-shadow: -10px 0px 13px -7px #464646, 10px 0px 13px -7px #464646, 5px 5px 15px 5px rgba(0,0,0,0); 
-    box-shadow: -10px 0px 13px -7px #464646, 10px 0px 13px -7px #464646, 5px 5px 15px 5px rgba(0,0,0,0);
-    height:100%;
-    width:500px;
-    padding-right:3%;
-    padding-top:1%;
-    padding-bottom:3%;
-    margin:3%;
-  }
-
-    .movieTitle {
-      position:relative;
-      top:15%;
-      margin-left:5%;
-      color:black;
-      font-weight: bolder;
-    }
-    
-    .movieYear{
-      position:relative;
-      top:15%;
-      margin-left:5%;
-      color:black;
-      font-weight:lighter;
+    .movieCard{
+      flex-shrink:0;
+      background-color:rgba(204, 0, 0, 0.981);
+      /* background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%); */
+      border-radius: 5px;
+      -webkit-box-shadow: -10px 0px 13px -7px #464646, 10px 0px 13px -7px #464646, 5px 5px 15px 5px rgba(0,0,0,0); 
+      box-shadow: -10px 0px 13px -7px #464646, 10px 0px 13px -7px #464646, 5px 5px 15px 5px rgba(0,0,0,0);
+      height:310px;
+      width:300px;
+      padding-bottom:5%;
+      margin-left:20px;
+      margin-right:20px;
+      margin-bottom:3%;
     }
 
-    .movieCard > button {
-      position:relative;
-      margin-right:auto;
-      left:75%;
-      bottom:35%;
+      .moviePoster{
+          height:250px;
+          width:300px;
+          object-fit: cover;
+          object-position:top;
+        }
 
-      padding-top:1%;
-      padding-bottom:1%;
+        .movieTitle {
+          position: relative;
+          text-align: center;
+          color:aliceblue;
+          font-weight: bolder;
+        }
+        
+        .movieYear{
+          position:relative;
+          text-align: center;
+          color:aliceblue;
+          font-weight:normal;
+        }
 
-      border-radius: 25px;
-      border:rgb(31, 31, 31);
-      border-style: solid;
-      border-width: 5px;
-      width:20%;
-      background-color: transparent;
-      font-weight: bold;
-    }
+        .movieCard > button {
+          margin-left: 3%;
+          padding:3%;
+          border-radius: 25px;
+          border:white;
+          color:white;
+          border-style: solid;
+          border-width: 2px;
+          background-color: transparent;
+          font-weight: bold;
+        }
 
-    @keyframes buttonAnimation {
-      0%{
-        transform: scale(1);
-      }
-      100%{
-        transform:scale(1.1);
-      }
-    }
+        @keyframes buttonAnimation {
+          0%{
+            transform: scale(1);
+          }
+          100%{
+            transform:scale(1.1);
+          }
+        }
 
-    .movieCard > button:hover{
-      transform: scale(1.03);
-      animation: buttonAnimation .03s forwards;
-    }
+        .movieCard > button:hover{
+          transform: scale(1.03);
+          animation: buttonAnimation .03s forwards;
+          /* background: rgb(238,174,202);
+          background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%); */
+
+        }
+
+        .movieCard > button:disabled{
+          border-radius: 25px;
+          border:gray;
+          color:gray;
+          border-style: solid;
+          border-width: 2px;
+          background-color: transparent !important;
+        }
+
+        .movieCard > button:disabled > :hover{
+          border-radius: 25px;
+          border:gray;
+          color:gray;
+          border-style: solid;
+          border-width: 2px;
+          background-color: transparent !important;
+        }

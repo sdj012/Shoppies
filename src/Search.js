@@ -27,6 +27,8 @@ class Search extends React.Component {
     this.disableExistingNominees=this.disableExistingNominees.bind(this);
     this.generateID=this.generateID.bind(this);
     this.lockScreen=this.lockScreen.bind(this);
+    this.paginateForwards=this.paginateForwards.bind(this);
+    this.paginateBackwards=this.paginateBackwards.bind(this);
   }
 
   queryResults(data){
@@ -35,13 +37,18 @@ class Search extends React.Component {
 
     for( var i in data.Search){
 
+      if(data.Search[i].Poster!=""){ //For Objects Containing Images
+
       movies.push(
         {
         "Title": data.Search[i].Title,
         "Year": data.Search[i].Year,
+        "Img": data.Search[i].Poster,
         "Nominated":false,
         }
       )
+
+      }
     }
 
     this.setState({
@@ -128,7 +135,33 @@ class Search extends React.Component {
       SearchTerm:event.target.value,
     })
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm)
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
+    .then(response => response.json())
+    .then(result=>this.queryResults(result))
+    .catch(error=>error);
+
+  }
+
+  paginateBackwards(event){
+
+    this.setState({
+      SearchTerm:event.target.value,
+    })
+
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=1")
+    .then(response => response.json())
+    .then(result=>this.queryResults(result))
+    .catch(error=>error);
+
+  }
+
+  paginateForwards(event){
+
+    this.setState({
+      SearchTerm:event.target.value,
+    })
+
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=2")
     .then(response => response.json())
     .then(result=>this.queryResults(result))
     .catch(error=>error);
@@ -272,6 +305,7 @@ class Search extends React.Component {
     console.log("bannerVisibility: " + bannerVisibility)
 
 
+
     return(
       <div className="parent">
         <div className={screenlock}></div>
@@ -297,11 +331,17 @@ class Search extends React.Component {
         
         {/* Each Movie: Title, Year, Disable-able Nominate Button */}
 
+
         <div className="div5">
+
+        <div><button value={this.state.SearchTerm} onClick={this.paginateBackwards}>Previous</button></div>
+        <div><button value={this.state.SearchTerm} onClick={this.paginateForwards}>Next</button></div>
 
           {this.state.Movies.map(movie => 
 
             <div className="movieCard">
+
+              <img className="moviePoster" width="65%" height="auto" src={movie.Img}></img>
               <p className="movieTitle">{movie.Title}</p>
               <p className="movieYear">{movie.Year}</p>
               <button className="nominateButton" id={this.generateID(movie.Title)} value={movie.Title} onClick={this.handleChange}>Nominate</button>
@@ -322,6 +362,8 @@ class Search extends React.Component {
             <button>Submit</button>
           </form>
         </div>  */}
+
+        <div className="footer"></div>
 
         
       </div>
