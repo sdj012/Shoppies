@@ -37,17 +37,28 @@ class Search extends React.Component {
 
     for( var i in data.Search){
 
-      if(data.Search[i].Poster!=""){ //For Objects Containing Images
+      if(data.Search[i].Poster==="N/A"){ //For Objects Containing Images
 
-      movies.push(
-        {
-        "Title": data.Search[i].Title,
-        "Year": data.Search[i].Year,
-        "Img": data.Search[i].Poster,
-        "Nominated":false,
-        }
-      )
+        movies.push( //Copying Data To State Array
+          {
+          "Title": data.Search[i].Title,
+          "Year": data.Search[i].Year,
+          "Img": "https://cdn.pixabay.com/photo/2019/04/24/21/55/cinema-4153289_960_720.jpg"
+          }
+        )
 
+      }
+
+      else { //For Objects Containing Images
+
+        movies.push( //Copy Data State Array
+          {
+          "Title": data.Search[i].Title,
+          "Year": data.Search[i].Year,
+          "Img": data.Search[i].Poster,
+          }
+        )
+        
       }
     }
 
