@@ -1,5 +1,7 @@
 import React from 'react';
 import './Search.css';
+import logo from './shoppiesLOGO.png';
+import landingbackground from './landing_background.png'
 
 class Search extends React.Component {
 
@@ -11,9 +13,12 @@ class Search extends React.Component {
       Movies:[],
       Nominees:[],
       SearchTerm:'',
+      currentPage:1,
       loading:true,
     }
+
     this.componentDidUpdate=this.componentDidUpdate.bind(this);
+    this.fireAnimation=this.fireAnimation.bind(this);
     // this.componentDidMount=this.componentDidMount.bind(this);
     // this.returnMovies=this.returnMovies.bind(this);
     this.handleChange=this.handleChange.bind(this);
@@ -33,6 +38,14 @@ class Search extends React.Component {
   }
 
   queryResults(data){
+
+    //Catch Empty Page
+
+    if(!data.Search) {
+      console.log("page does not exist") 
+    }
+
+    else{
 
     let movies=[]
 
@@ -68,6 +81,8 @@ class Search extends React.Component {
     })
 
     console.log(this.state.Movies);
+
+    }
 
   }
 
@@ -151,18 +166,7 @@ class Search extends React.Component {
       SearchTerm:event.target.value,
     })
 
-    // fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
-    // .then(response => response.json())
-    // .then(result=>this.queryResults(result))
-    // .catch(error=>error);
-
-  }
-
-  //  
-
-  handleSubmit(event){
-
-    event.preventDefault();
+    // Enable Live Search
 
     fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
     .then(response => response.json())
@@ -172,13 +176,34 @@ class Search extends React.Component {
   }
 
 
+  handleSubmit(event){
+
+    event.preventDefault();
+
+    // if(event.charCode === 13 ) { //Detect Enter Key 
+ 
+      fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
+      .then(response => response.json())
+      .then(result=>this.queryResults(result))
+      .catch(error=>error);
+
+    // }
+
+  }
+
+
   paginateBackwards(event){
 
+
+    let previousPage=this.state.currentPage-1;
+
+
     this.setState({
+      currentPage:previousPage,
       SearchTerm:event.target.value,
     })
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=1")
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + this.state.currentPage)
     .then(response => response.json())
     .then(result=>this.queryResults(result))
     .catch(error=>error);
@@ -187,11 +212,14 @@ class Search extends React.Component {
 
   paginateForwards(event){
 
+    let nextPage=this.state.currentPage+1;
+
     this.setState({
+      currentPage:nextPage,
       SearchTerm:event.target.value,
     })
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=2")
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + this.state.currentPage)
     .then(response => response.json())
     .then(result=>this.queryResults(result))
     .catch(error=>error);
@@ -312,18 +340,22 @@ class Search extends React.Component {
     return this.state.Movies;
   }
 
+  fireAnimation(){
+
+  }
+
   componentDidUpdate(){
 
-
+    this.fireAnimation()
     this.disableExistingNominees(); //Check If Current Render Contains Titles in Current Nominee List. If Title Present in Current Nominee List, Disable the Nominate Button
   }
 
 
 
-  // Search Fetch from Api //
+  // Search Fetch from Api
   // componentDidMount(){
     
-  //   fetch("http://www.omdbapi.com/?apikey=e8dad806&s=Star")
+  //   fetch("http://www.omdbapi.com/?apikey=e8dad806&s=The&page="+this.state.currentPage)
   //   .then(response => response.json())
   //   .then(result=>this.queryResults(result))
   //   .catch(error=>error);
@@ -347,7 +379,25 @@ class Search extends React.Component {
 
         <div className="div1">
 
-          <div className="nominees">{this.state.Nominees.map(nominee => <div>{nominee} <button value={nominee} onClick={this.removeFromList}>remove</button></div>)}</div>
+          <div className="navBar">
+            <a><img className="logo" src={logo}></img></a>
+            <a>Vote</a>
+            <a>About</a>
+            <a>Contact</a>
+            <a>Highlights</a>
+            <a>Partners</a>
+          </div>
+
+          <div className="nominees">
+            {this.state.Nominees.map(nominee => <div>{nominee} <button value={nominee} onClick={this.removeFromList}>remove</button></div>)}
+
+          </div>
+
+          <div className="landingBanner">
+            <div className="bannerElements"><img className="landingLogo" src={logo}></img></div>
+          </div>
+
+
         
         </div>
 
@@ -358,8 +408,8 @@ class Search extends React.Component {
   
         <div className="div3">
           <form onSubmit={this.handleSubmit}>
-            <input className="searchBar" value={this.state.searchTerm} type="text" placeholder="Search For a Movie" onChange={this.handleSearch}></input>
-            <input type="submit" value="Submit"/>
+            <input className="searchBar" value={this.state.searchTerm} type="search" placeholder="  Search For a Movie" onChange={this.handleSearch}></input>
+            <input className="submitQuery" type="submit" value="Search" onKeyPress={this.handleSubmit}/>
           </form>
         </div>
 
@@ -369,10 +419,7 @@ class Search extends React.Component {
         {/* Render Movies: Poster, Title, Year, Disable-able Nominate Button */}
 
 
-        <div className="div5">
-
-        <div><button value={this.state.SearchTerm} onClick={this.paginateBackwards}>Previous</button></div>
-        <div><button value={this.state.SearchTerm} onClick={this.paginateForwards}>Next</button></div>
+        <div className="div5" id="topOfResults">
 
           {this.state.Movies.map(movie => 
 
@@ -388,6 +435,12 @@ class Search extends React.Component {
 
           )}
 
+        <div className="paginateButtons">
+        <a href="#topOfResults"><button className="paginateBackwards" value={this.state.SearchTerm} onClick={this.paginateBackwards}>Previous</button></a>
+        <a href="#topOfResults"><button href="#topOfResults" className="paginateForwards" value={this.state.SearchTerm} onClick={this.paginateForwards}>Next</button></a>
+        </div>
+
+        
         </div>
 
 
