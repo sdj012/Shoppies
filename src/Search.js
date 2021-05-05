@@ -19,6 +19,7 @@ class Search extends React.Component {
     this.handleChange=this.handleChange.bind(this);
     // this.checkDuplicates=this.checkDuplicates.bind(this);
     // this.markNominated=this.markNominated.bind(this);
+    this.handleSubmit=this.handleSubmit.bind(this);
     this.getIndexValue=this.getIndexValue.bind(this);
     this.hitMaxNumberOfVotes=this.hitMaxNumberOfVotes.bind(this);
     this.removeFromList=this.removeFromList.bind(this);
@@ -140,11 +141,28 @@ class Search extends React.Component {
 
   }
 
+  // Set User Entry As State Search Term
+
   handleSearch(event){
+
+    event.preventDefault();
 
     this.setState({
       SearchTerm:event.target.value,
     })
+
+    // fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
+    // .then(response => response.json())
+    // .then(result=>this.queryResults(result))
+    // .catch(error=>error);
+
+  }
+
+  //  
+
+  handleSubmit(event){
+
+    event.preventDefault();
 
     fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
     .then(response => response.json())
@@ -152,6 +170,7 @@ class Search extends React.Component {
     .catch(error=>error);
 
   }
+
 
   paginateBackwards(event){
 
@@ -178,6 +197,8 @@ class Search extends React.Component {
     .catch(error=>error);
 
   }
+
+  // Handle Nominate Buttons
 
   handleChange(event){
 
@@ -319,7 +340,10 @@ class Search extends React.Component {
 
     return(
       <div className="parent">
+
         <div className={screenlock}></div>
+
+        {/* Display Nominees */}
 
         <div className="div1">
 
@@ -329,18 +353,20 @@ class Search extends React.Component {
 
         {/* <div className={bannerVisibility}>You Voted For 5 Movies. Head to Submit</div> */}
         <div className="div2"></div>
+
+        {/* Search Bar */}
   
         <div className="div3">
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <input className="searchBar" value={this.state.searchTerm} type="text" placeholder="Search For a Movie" onChange={this.handleSearch}></input>
-            {/* <button value="submit">Search</button> */}
+            <input type="submit" value="Submit"/>
           </form>
         </div>
 
 
 
         
-        {/* Each Movie: Title, Year, Disable-able Nominate Button */}
+        {/* Render Movies: Poster, Title, Year, Disable-able Nominate Button */}
 
 
         <div className="div5">
