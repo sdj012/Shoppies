@@ -17,13 +17,14 @@ class Search extends React.Component {
       loading:true,
     }
 
+    this.moviePool=React.createRef();
+
     this.componentDidUpdate=this.componentDidUpdate.bind(this);
     this.fireAnimation=this.fireAnimation.bind(this);
     // this.componentDidMount=this.componentDidMount.bind(this);
     // this.returnMovies=this.returnMovies.bind(this);
     this.handleChange=this.handleChange.bind(this);
     // this.checkDuplicates=this.checkDuplicates.bind(this);
-    // this.markNominated=this.markNominated.bind(this);
     this.handleSubmit=this.handleSubmit.bind(this);
     this.getIndexValue=this.getIndexValue.bind(this);
     this.hitMaxNumberOfVotes=this.hitMaxNumberOfVotes.bind(this);
@@ -142,7 +143,7 @@ class Search extends React.Component {
       return "div1 hiddenBanner"
     }
     
-    else return "div1"
+    else return "hide"
     
   }
 
@@ -180,6 +181,8 @@ class Search extends React.Component {
 
     event.preventDefault();
 
+    this.moviePool.current.scrollIntoView(); // Move to Beginning of List
+
     // if(event.charCode === 13 ) { //Detect Enter Key 
  
       fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
@@ -192,37 +195,44 @@ class Search extends React.Component {
   }
 
 
-  paginateBackwards(event){
+  paginateBackwards(event){ // Fetch Another Page Using Parameters 'page'
 
+    event.preventDefault();
 
     let previousPage=this.state.currentPage-1;
 
+
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + previousPage)
+    .then(response => response.json())
+    .then(result=>this.queryResults(result))
+    .catch(error=>error);
 
     this.setState({
       currentPage:previousPage,
       SearchTerm:event.target.value,
     })
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + this.state.currentPage)
-    .then(response => response.json())
-    .then(result=>this.queryResults(result))
-    .catch(error=>error);
+    this.moviePool.current.scrollIntoView(); // Move To Beginning of List
 
   }
 
-  paginateForwards(event){
+  paginateForwards(event){ // Fetch Another Page Using Parameters 'page'
+
+    event.preventDefault();
 
     let nextPage=this.state.currentPage+1;
 
+    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + nextPage)
+    .then(response => response.json())
+    .then(result=>this.queryResults(result))
+    .catch(error=>error);
+    
     this.setState({
       currentPage:nextPage,
       SearchTerm:event.target.value,
     })
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + this.state.currentPage)
-    .then(response => response.json())
-    .then(result=>this.queryResults(result))
-    .catch(error=>error);
+    this.moviePool.current.scrollIntoView(); // Move To Beginning of List
 
   }
 
@@ -309,22 +319,12 @@ class Search extends React.Component {
     
   }
 
-  //Change State "Nominated to True" 
-  markNominated(movieTitle){
-
-    this.setState(prevState => ({
-      Movies: {
-          ...prevState.Movies,
-          [prevState.Movies[1].Nominated]: true,
-      },
-    }));
-  }
 
   existsInList(movieTitle){
 
     console.log("clicked on: " + movieTitle)
 
-    this.state.Nominees.map(nominee=>{
+    this.state.Nominees.map(nominee=>{ //Search For Exact Match
 
       if(movieTitle==nominee)return true;
       console.log("nominee: " + nominee)
@@ -381,7 +381,7 @@ class Search extends React.Component {
 
           <div className="navBar">
             <a><img className="logo" src={logo}></img></a>
-            <a>Vote</a>
+            <a href="#">Vote</a>
             <a>About</a>
             <a>Contact</a>
             <a>Highlights</a>
@@ -389,8 +389,8 @@ class Search extends React.Component {
           </div>
 
           <div className="nominees">
-            {this.state.Nominees.map(nominee => <div>{nominee} <button value={nominee} onClick={this.removeFromList}>remove</button></div>)}
-
+            {this.state.Nominees.map(nominee => <div>{nominee} <button className="removeNominee" value={nominee} onClick={this.removeFromList}> X </button></div>)}
+            <div className={bannerVisibility}> Head to Submit or Remove Votes to Vote For Other Movies<button>VOTE</button></div>
           </div>
 
           <div className="landingBanner">
@@ -401,12 +401,11 @@ class Search extends React.Component {
         
         </div>
 
-        {/* <div className={bannerVisibility}>You Voted For 5 Movies. Head to Submit</div> */}
         <div className="div2"></div>
 
         {/* Search Bar */}
   
-        <div className="div3">
+        <div className="div3" ref={this.moviePool}>
           <form onSubmit={this.handleSubmit}>
             <input className="searchBar" value={this.state.searchTerm} type="search" placeholder="  Search For a Movie" onChange={this.handleSearch}></input>
             <input className="submitQuery" type="submit" value="Search" onKeyPress={this.handleSubmit}/>
@@ -419,7 +418,7 @@ class Search extends React.Component {
         {/* Render Movies: Poster, Title, Year, Disable-able Nominate Button */}
 
 
-        <div className="div5" id="topOfResults">
+        <div className="div5" >
 
           {this.state.Movies.map(movie => 
 
@@ -436,8 +435,8 @@ class Search extends React.Component {
           )}
 
         <div className="paginateButtons">
-        <a href="#topOfResults"><button className="paginateBackwards" value={this.state.SearchTerm} onClick={this.paginateBackwards}>Previous</button></a>
-        <a href="#topOfResults"><button href="#topOfResults" className="paginateForwards" value={this.state.SearchTerm} onClick={this.paginateForwards}>Next</button></a>
+          <button className="paginateBackwards" value={this.state.SearchTerm} onClick={this.paginateBackwards}>Previous</button>
+          <button className="paginateForwards" value={this.state.SearchTerm} onClick={this.paginateForwards}>Next</button>
         </div>
 
         
@@ -453,7 +452,7 @@ class Search extends React.Component {
           </form>
         </div>  */}
 
-        <div className="footer"></div>
+        {/* <div className="footer"></div> */}
 
         
       </div>
