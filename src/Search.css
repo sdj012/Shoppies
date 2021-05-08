@@ -224,7 +224,7 @@
       width:50%;
       height:5vh;
       color:white !important;
-      border:2px solid white;
+      border:1px solid white;
       border-radius: 20px;
       background-color: transparent;
       padding-left: 1%;
@@ -232,23 +232,26 @@
 
       font-size: larger;
       text-transform:uppercase;
-      font-weight:600;
+      font-weight:500;
 
       font-family:var(--globalFont);
       letter-spacing: var(--globalLetterSpacing);
     }
-
+    
+    ::placeholder { 
+      color:white;
+    }
     .submitQuery{
       margin-top:5%;
       margin-left: 1%;
       color:white!important;
-      border:2px solid white;
+      border:1px solid white;
       border-radius: 20px;
       background-color: transparent;
       width:20%;
       height:5vh;
       text-transform:uppercase;
-      font-weight: 600;
+      font-weight: 500;
       font-size: larger;
 
 
@@ -322,6 +325,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    align-content: space-between;
     padding-top:1%;
     padding-bottom:10px;
     padding-left: 12%;
@@ -347,9 +351,12 @@
 
   /* Buttons */
   .paginateButtons{
-    align-self: flex-end;
-    padding-top:5%;
-    padding-bottom: 5%;
+    align-self:flex-end;
+    height:100px;
+    width:100%;
+    margin-top: 10%;
+    padding-bottom:15%;
+    margin-bottom: 5%;
   }
 
   .paginateBackwards{
@@ -398,7 +405,7 @@
       padding-bottom:50px;
       margin-left:20px;
       margin-right:20px;
-      margin-bottom:3%;
+      margin-bottom:10%;
     }
 
       .moviePoster{

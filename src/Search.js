@@ -169,7 +169,7 @@ class Search extends React.Component {
 
     // Enable Live Search
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
+    fetch("https://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
     .then(response => response.json())
     .then(result=>this.queryResults(result))
     .catch(error=>error);
@@ -185,7 +185,7 @@ class Search extends React.Component {
 
     // if(event.charCode === 13 ) { //Detect Enter Key 
  
-      fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
+      fetch("https://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm )
       .then(response => response.json())
       .then(result=>this.queryResults(result))
       .catch(error=>error);
@@ -202,7 +202,7 @@ class Search extends React.Component {
     let previousPage=this.state.currentPage-1;
 
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + previousPage)
+    fetch("https://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + previousPage)
     .then(response => response.json())
     .then(result=>this.queryResults(result))
     .catch(error=>error);
@@ -222,7 +222,7 @@ class Search extends React.Component {
 
     let nextPage=this.state.currentPage+1;
 
-    fetch("http://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + nextPage)
+    fetch("https://www.omdbapi.com/?apikey=e8dad806&s=" + this.state.SearchTerm + "&page=" + nextPage)
     .then(response => response.json())
     .then(result=>this.queryResults(result))
     .catch(error=>error);
