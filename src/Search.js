@@ -1,7 +1,8 @@
 import React from 'react';
 import './Search.css';
 import logo from './shoppiesLOGO.png';
-import landingbackground from './landing_background.png'
+import graphic_a from './shoppies_a.png';
+import graphic_b from './shoppies_b.png';
 
 class Search extends React.Component {
 
@@ -25,6 +26,7 @@ class Search extends React.Component {
     // this.returnMovies=this.returnMovies.bind(this);
     this.handleChange=this.handleChange.bind(this);
     // this.checkDuplicates=this.checkDuplicates.bind(this);
+
     this.handleSubmit=this.handleSubmit.bind(this);
     this.getIndexValue=this.getIndexValue.bind(this);
     this.hitMaxNumberOfVotes=this.hitMaxNumberOfVotes.bind(this);
@@ -40,15 +42,17 @@ class Search extends React.Component {
 
   queryResults(data){
 
+    let movies=[]
+
     //Catch Empty Page
 
     if(!data.Search) {
-      console.log("page does not exist") 
+
+      console.log("nodata")
+
     }
 
     else{
-
-    let movies=[]
 
     for( var i in data.Search){
 
@@ -77,13 +81,14 @@ class Search extends React.Component {
       }
     }
 
+    }
+
     this.setState({
       Movies:movies
     })
 
     console.log(this.state.Movies);
 
-    }
 
   }
 
@@ -236,6 +241,7 @@ class Search extends React.Component {
 
   }
 
+
   // Handle Nominate Buttons
 
   handleChange(event){
@@ -272,30 +278,34 @@ class Search extends React.Component {
 
     // document.getElementById(event.target.value).style.display="none";
     // document.getElementById(event.target.value).disabled="true";
-    }
 
-    disableExistingNominees(){
+  }
+ 
 
-      let MoviesIndex=0;
-      let NomineesIndex=0;
+  disableExistingNominees(){
 
-        for(MoviesIndex in this.state.Movies){
+    let MoviesIndex=0;
+    let NomineesIndex=0;
 
-          let movieTitleInMovies=this.state.Movies[MoviesIndex].Title;
+      for(MoviesIndex in this.state.Movies){
 
-          for(NomineesIndex in this.state.Nominees){
+        let movieTitleInMovies=this.state.Movies[MoviesIndex].Title;
 
-            let movieTitleInNominees=this.state.Nominees[NomineesIndex]; 
+        for(NomineesIndex in this.state.Nominees){
 
-            if(movieTitleInMovies==movieTitleInNominees) document.getElementById(this.generateID(movieTitleInMovies)).disabled="true"; //Loop Through Current Render of Movies & Search For the Movie Title in Nominees List
+          let movieTitleInNominees=this.state.Nominees[NomineesIndex]; 
 
-            NomineesIndex++;
+          if(movieTitleInMovies==movieTitleInNominees) document.getElementById(this.generateID(movieTitleInMovies)).disabled="true";
+           //Loop Through Current Render of Movies & Search For the Movie Title in Nominees List
 
-          }
+          NomineesIndex++;
 
-          MoviesIndex++;
         }
-    }
+
+        MoviesIndex++;
+      }
+  }
+  
 
 
 
@@ -388,6 +398,13 @@ class Search extends React.Component {
             <a href="#">Partners</a>
           </div>
 
+
+          <div className="landingBanner">
+            {/* <div>Shoppies Academy Awards 2021</div> */}
+              {/* <img class="bannerElements" src={graphic_a}></img> */}
+              {/* <img class="bannerElements"src={graphic_b}></img> */}
+          </div>
+
           <div className="nominees">
             {this.state.Nominees.map(nominee => <div>{nominee} <button className="removeNominee" value={nominee} onClick={this.removeFromList}> X </button></div>)}
            
@@ -398,12 +415,6 @@ class Search extends React.Component {
 
           </div>
 
-          <div className="landingBanner">
-            <div className="bannerElements"><img className="landingLogo" src={logo}></img></div>
-          </div>
-
-
-        
         </div>
 
         <div className="div2"></div>
@@ -428,7 +439,6 @@ class Search extends React.Component {
           {this.state.Movies.map(movie => 
 
             <div className="movieCard">
-
               <img className="moviePoster" width="65%" height="auto" src={movie.Img}></img>
               <p className="movieTitle">{movie.Title}</p>
               <p className="movieYear">{movie.Year}</p>
