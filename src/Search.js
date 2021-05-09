@@ -1,6 +1,13 @@
 import React from 'react';
 import './Search.css';
 import logo from './shoppiesLOGO.png';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from 'react-bootstrap/Container';
+import Confirm from './Confirm.js'
+import {Switch,Route,Link} from "react-router-dom";
+import {BrowserRouter as Router} from 'react-router-dom';
 import graphic_a from './shoppies_a.png';
 import graphic_b from './shoppies_b.png';
 
@@ -19,6 +26,8 @@ class Search extends React.Component {
     }
 
     this.moviePool=React.createRef();
+    this.inputFocus=React.createRef();
+    this.disableButton=React.createRef();
 
     this.componentDidUpdate=this.componentDidUpdate.bind(this);
     this.fireAnimation=this.fireAnimation.bind(this);
@@ -26,7 +35,7 @@ class Search extends React.Component {
     // this.returnMovies=this.returnMovies.bind(this);
     this.handleChange=this.handleChange.bind(this);
     // this.checkDuplicates=this.checkDuplicates.bind(this);
-
+    this.handleVoteButton=this.handleVoteButton.bind(this);
     this.handleSubmit=this.handleSubmit.bind(this);
     this.getIndexValue=this.getIndexValue.bind(this);
     this.hitMaxNumberOfVotes=this.hitMaxNumberOfVotes.bind(this);
@@ -145,7 +154,7 @@ class Search extends React.Component {
   hitMaxNumberOfVotes(){
 
     if(this.state.Nominees.length == 5 ) {
-      return "div1 hiddenBanner"
+      return "hiddenBanner"
     }
     
     else return "hide"
@@ -160,6 +169,11 @@ class Search extends React.Component {
     
     else return "hiddenLayer"
 
+  }
+
+  handleVoteButton(){
+    console.log("do")
+    this.inputFocus.current.focus();
   }
 
   // Set User Entry As State Search Term
@@ -381,6 +395,7 @@ class Search extends React.Component {
 
 
     return(
+      
       <div className="parent">
 
         <div className={screenlock}></div>
@@ -389,32 +404,53 @@ class Search extends React.Component {
 
         <div className="div1">
 
-          <div className="navBar">
+          {/* <div className="navBar">
             <a><img className="logo" src={logo}></img></a>
             <a href="#">Vote</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
             <a href="#">Highlights</a>
             <a href="#">Partners</a>
+          </div> */}
+
+          <div>
+            <Navbar className="responsive-NavBar" collapseOnSelect expand="lg">
+            <Navbar.Brand href="#home"><a><img className="logo" src={logo}></img></a></Navbar.Brand>
+              <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+              <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="mr-auto ml-auto responsive-NavBar">
+                  {/* <Navbar.Brand href="#home"><a><img className="logo" src={logo}></img></a></Navbar.Brand> */}
+                  <Nav.Link className="responsive-NavBar"  href="#">Vote</Nav.Link>
+                  <Nav.Link className="responsive-NavBar"  href="#">About</Nav.Link>
+                  <Nav.Link className="responsive-NavBar"  href="#">Contact</Nav.Link>
+                  <Nav.Link className="responsive-NavBar"  href="#">Highlights</Nav.Link>
+                  <Nav.Link className="responsive-NavBar"  href="#">Partners</Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
+            </Navbar>
           </div>
 
 
           <div className="landingBanner">
-            {/* <div>Shoppies Academy Awards 2021</div> */}
-              {/* <img class="bannerElements" src={graphic_a}></img> */}
-              {/* <img class="bannerElements"src={graphic_b}></img> */}
+            {/* <div class="bannerElements"><img className="logo" src={logo}></img></div> */}
+              <img className="bannerElements" src={graphic_a}></img>
+              <img className="bannerElements"src={graphic_b}></img>
           </div>
 
+         <button className="floatingButton" onClick={this.handleVoteButton}>Vote Now</button>
+
+
+          
           <div className="nominees">
             {this.state.Nominees.map(nominee => <div>{nominee} <button className="removeNominee" value={nominee} onClick={this.removeFromList}> X </button></div>)}
            
             <div className={bannerVisibility}> 
               <div><img className="logo" src={logo}></img></div>
-              You Voted For 5 Movies. Head To <button className="submitVote">Submit</button> or Remove Votes to Vote For Other Movies
+                <button className="submitVote">Submit</button> or Remove Votes to Vote For Other Movies
             </div>
 
           </div>
-
+      
         </div>
 
         <div className="div2"></div>
@@ -423,7 +459,7 @@ class Search extends React.Component {
   
         <div className="div3" ref={this.moviePool}>
           <form onSubmit={this.handleSubmit}>
-            <input className="searchBar" value={this.state.searchTerm} type="search" placeholder="  Search For a Movie" onChange={this.handleSearch}></input>
+            <input className="searchBar" ref={this.inputFocus} value={this.state.searchTerm} type="search" placeholder="  Search For a Movie" onChange={this.handleSearch}></input>
             <input className="submitQuery" type="submit" value="Search" onKeyPress={this.handleSubmit}/>
           </form>
         </div>
@@ -457,6 +493,10 @@ class Search extends React.Component {
         
         </div>
 
+        <div className="Confirmation">
+
+        </div>
+
 
 
         {/* <div className="chat-popup" id="myForm">
@@ -471,6 +511,7 @@ class Search extends React.Component {
 
         
       </div>
+    
 
     )
   }
