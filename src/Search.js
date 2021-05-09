@@ -382,15 +382,20 @@ class Search extends React.Component {
           <div className="navBar">
             <a><img className="logo" src={logo}></img></a>
             <a href="#">Vote</a>
-            <a>About</a>
-            <a>Contact</a>
-            <a>Highlights</a>
-            <a>Partners</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="#">Highlights</a>
+            <a href="#">Partners</a>
           </div>
 
           <div className="nominees">
             {this.state.Nominees.map(nominee => <div>{nominee} <button className="removeNominee" value={nominee} onClick={this.removeFromList}> X </button></div>)}
-            <div className={bannerVisibility}> Head to Submit or Remove Votes to Vote For Other Movies<button>VOTE</button></div>
+           
+            <div className={bannerVisibility}> 
+              <div><img className="logo" src={logo}></img></div>
+              You Voted For 5 Movies. Head To <button className="submitVote">Submit</button> or Remove Votes to Vote For Other Movies
+            </div>
+
           </div>
 
           <div className="landingBanner">
