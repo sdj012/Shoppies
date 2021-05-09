@@ -1,0 +1,15 @@
+.confirm{
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height:100vh;
+  padding: 25%;
+
+  color:white;
+}
+
+/* .movie , button{
+  background-color: aliceblue;
+  margin-left:2%;
+  margin-right:2%;
+} */

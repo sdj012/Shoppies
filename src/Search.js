@@ -25,12 +25,16 @@ class Search extends React.Component {
       loading:true,
     }
 
+
     this.moviePool=React.createRef();
     this.inputFocus=React.createRef();
     this.disableButton=React.createRef();
+    this.confirmationDialogue=React.createRef();
+    this.nomineeArea=React.createRef();
 
     this.componentDidUpdate=this.componentDidUpdate.bind(this);
     this.fireAnimation=this.fireAnimation.bind(this);
+    this.handleSubmitNominations=this.handleSubmitNominations.bind(this);
     // this.componentDidMount=this.componentDidMount.bind(this);
     // this.returnMovies=this.returnMovies.bind(this);
     this.handleChange=this.handleChange.bind(this);
@@ -174,6 +178,16 @@ class Search extends React.Component {
   handleVoteButton(){
     console.log("do")
     this.inputFocus.current.focus();
+  }
+
+  handleSubmitNominations(){
+    this.confirmationDialogue.current.style.display="block"
+    this.confirmationDialogue.current.scrollIntoView();
+    this.nomineeArea.current.style.display="none";
+    //Lock Scroll Here
+
+    //clear Nominee State
+
   }
 
   // Set User Entry As State Search Term
@@ -392,8 +406,6 @@ class Search extends React.Component {
     let screenlock=this.lockScreen();
     console.log("bannerVisibility: " + bannerVisibility)
 
-
-
     return(
       
       <div className="parent">
@@ -441,12 +453,12 @@ class Search extends React.Component {
 
 
           
-          <div className="nominees">
+          <div ref={this.nomineeArea} className="nominees">
             {this.state.Nominees.map(nominee => <div>{nominee} <button className="removeNominee" value={nominee} onClick={this.removeFromList}> X </button></div>)}
            
             <div className={bannerVisibility}> 
               <div><img className="logo" src={logo}></img></div>
-                <button className="submitVote">Submit</button> or Remove Votes to Vote For Other Movies
+                <button className="submitVote" onClick={this.handleSubmitNominations}>Submit</button> or Remove Votes to Vote For Other Movies
             </div>
 
           </div>
@@ -490,13 +502,13 @@ class Search extends React.Component {
           <button className="paginateForwards" value={this.state.SearchTerm} onClick={this.paginateForwards}>Next</button>
         </div>
 
+       <div className="confirmationDialogue" ref={this.confirmationDialogue}>
+        <Confirm nominees={this.state.Nominees}/> 
+        {/* You Voted For {this.state.Nominees} */}
+       </div> 
+
         
         </div>
-
-        <div className="Confirmation">
-
-        </div>
-
 
 
         {/* <div className="chat-popup" id="myForm">
