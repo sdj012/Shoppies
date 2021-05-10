@@ -20,6 +20,12 @@ class Confirm extends React.Component {
     this.state={
       Nominees:this.props.nominees
     }
+    this.refreshPage=this.refreshPage.bind(this);
+  }
+
+
+  refreshPage(){
+    window.location.reload();
   }
 
     render(){
@@ -27,12 +33,13 @@ class Confirm extends React.Component {
 
     return(
       <div className="confirm">
-        <div>Thank You For Voting For:</div>
+         <div><img className="logo" src={logo}></img></div>
+        <div><strong>Thank You For Voting For:</strong></div>
 
          {this.props.nominees.map(movie=> 
          <div className="movie">{movie}</div>)}
 
-         <button>Exit</button>
+         <button className="submitVote" onClick={this.refreshPage}>Exit</button>
       </div>
     )}
 }
